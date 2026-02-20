@@ -4,12 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ananta & Desy - Wedding Invitation</title>
+  <title>Ananta & Desy – Wedding Invitation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Dancing+Script:wght@600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Dancing+Script:wght@500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
     rel="stylesheet">
+
   <style>
+    /* ─── RESET & BASE ─── */
     *,
     *::before,
     *::after {
@@ -19,33 +21,36 @@
     }
 
     :root {
-      --burgundy: #7a2444;
-      --olive: #5a6b2a;
-      --olive-mid: #7a8f3a;
-      --cream: #f5efe6;
-      --cream-dark: #ede3d4;
+      --burg: #7a2444;
+      --burg-l: #9e3558;
+      --olive: #4a5e1e;
+      --olive-m: #6a7e30;
+      --pink: #d4789e;
+      --pink-l: #e8a8c4;
+      --gold: #c9a84c;
+      --cream: #f6f0e8;
+      --cream-d: #ede3d4;
     }
 
     html,
     body {
       font-family: 'Cormorant Garamond', serif;
-      background: #c4b8aa;
+      background: #b5a898;
       min-height: 100%;
     }
 
-    /* ── PHONE SHELL ── */
-    .app-shell {
+    /* ─── APP SHELL ─── */
+    .shell {
       width: 100%;
       max-width: 430px;
       min-height: 100svh;
-      /* small viewport height — mobile-safe */
       margin: 0 auto;
       background: var(--cream);
       position: relative;
       overflow: hidden;
     }
 
-    /* ── PAGES ── */
+    /* ─── PAGES ─── */
     .page {
       width: 100%;
       min-height: 100svh;
@@ -54,112 +59,234 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-
-    /* ════════════════════════════
-     PAGE 1 — COVER
-  ════════════════════════════ */
-    #page1 {
-      background: var(--cream);
-      z-index: 2;
-      transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1);
-    }
-
-    #page1.slide-away {
-      transform: translateY(-100%);
-      position: fixed;
-      /* keep it in place while sliding */
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%) translateY(-100%);
-      width: min(430px, 100%);
-    }
-
-    /* floral background layer */
-    .floral-wrap {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
       overflow: hidden;
     }
 
-    /* corner / side SVG helpers */
-    .c-svg {
-      position: absolute;
+    /* ═══════════════════════════════════════
+   PAGE 1 — COVER
+═══════════════════════════════════════ */
+    #p1 {
+      background: var(--cream);
+      z-index: 2;
     }
 
-    .c-tl {
+    /* ── Floral layer ── */
+    .fl-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* ── SWAY animations ── */
+    @keyframes sway {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      30% {
+        transform: rotate(3deg);
+      }
+
+      70% {
+        transform: rotate(-2.5deg);
+      }
+    }
+
+    @keyframes swayR {
+
+      0%,
+      100% {
+        transform: rotate(0deg) scaleX(-1);
+      }
+
+      30% {
+        transform: rotate(-3deg) scaleX(-1);
+      }
+
+      70% {
+        transform: rotate(2.5deg) scaleX(-1);
+      }
+    }
+
+    @keyframes petalBloom {
+      0% {
+        transform: scale(0) rotate(-30deg);
+        opacity: 0;
+      }
+
+      60% {
+        transform: scale(1.15) rotate(5deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes floatUp {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        opacity: .7;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: .7;
+      }
+    }
+
+    /* ─ CORNER SVG stems ─ */
+    .c-stem {
+      position: absolute;
+      transform-origin: bottom center;
+    }
+
+    .c-stem.tl {
       top: 0;
       left: 0;
+      transform-origin: top left;
+      animation: sway 4s ease-in-out infinite;
     }
 
-    .c-tr {
+    .c-stem.tr {
       top: 0;
       right: 0;
-      transform: scaleX(-1);
-      transform-origin: right top;
+      transform-origin: top right;
+      animation: swayR 4.3s ease-in-out infinite;
     }
 
-    .c-bl {
+    .c-stem.bl {
       bottom: 0;
       left: 0;
-      transform: scaleY(-1);
-      transform-origin: left bottom;
+      transform-origin: bottom left;
+      animation: sway 3.8s ease-in-out 0.5s infinite;
     }
 
-    .c-br {
+    .c-stem.br {
       bottom: 0;
       right: 0;
-      transform: scale(-1, -1);
-      transform-origin: right bottom;
+      transform-origin: bottom right;
+      animation: swayR 4.1s ease-in-out 0.3s infinite;
     }
 
-    .s-svg {
+    /* ─ SIDE stems ─ */
+    .s-stem {
       position: absolute;
-    }
-
-    .s-left {
-      left: 0;
       top: 50%;
+      transform-origin: bottom center;
+    }
+
+    .s-stem.left {
+      left: 0;
       transform: translateY(-50%);
+      animation: sway 3.6s ease-in-out 1s infinite;
     }
 
-    .s-right {
+    .s-stem.right {
       right: 0;
-      top: 50%;
       transform: translateY(-50%) scaleX(-1);
-      transform-origin: right center;
+      animation: swayR 3.9s ease-in-out 0.7s infinite;
     }
 
-    /* cover body */
-    .cover-inner {
+    /* ─ Blooming flowers ─ */
+    .bloom {
+      position: absolute;
+      animation: petalBloom 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+        floatUp 3.5s ease-in-out 1.5s infinite;
+    }
+
+    .bloom:nth-child(2) {
+      animation-delay: 0.25s, 1.75s;
+    }
+
+    .bloom:nth-child(3) {
+      animation-delay: 0.45s, 2.0s;
+    }
+
+    .bloom:nth-child(4) {
+      animation-delay: 0.15s, 1.6s;
+    }
+
+    .bloom:nth-child(5) {
+      animation-delay: 0.6s, 2.2s;
+    }
+
+    .bloom:nth-child(6) {
+      animation-delay: 0.35s, 1.9s;
+    }
+
+    /* ── Cover content ── */
+    .cover-body {
       position: relative;
-      z-index: 1;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      /* horizontal padding = room for side flowers (≈60-70px each side) */
-      padding: 0 72px;
-      gap: 0;
+      padding: 0 76px;
     }
 
-    .lbl-inv {
+    .lbl-wedding {
+      font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: clamp(0.78rem, 2.4vw, 1rem);
-      color: var(--burgundy);
-      letter-spacing: .18em;
-      margin-bottom: clamp(12px, 3.5vh, 22px);
+      font-size: clamp(1.15rem, 4vw, 1.5rem);
+      /* bigger */
+      color: var(--burg);
+      letter-spacing: .14em;
+      margin-bottom: clamp(12px, 3.5vh, 20px);
       opacity: 0;
       animation: fadeUp .8s .3s forwards;
     }
 
+    .lbl-invitation {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(.85rem, 2.8vw, 1.1rem);
+      color: var(--olive-m);
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      margin-top: -6px;
+      margin-bottom: clamp(14px, 4vh, 22px);
+      opacity: 0;
+      animation: fadeUp .8s .5s forwards;
+    }
+
     .img-wrap {
-      width: clamp(185px, 52vw, 260px);
+      width: clamp(185px, 52vw, 258px);
       margin-bottom: clamp(14px, 3.8vh, 22px);
       opacity: 0;
-      animation: fadeUp .9s .5s forwards;
-      filter: drop-shadow(0 6px 18px rgba(122, 36, 68, .2));
+      animation: fadeUp .9s .65s forwards;
+      filter: drop-shadow(0 6px 18px rgba(122, 36, 68, .22));
     }
 
     .img-wrap img {
@@ -168,35 +295,35 @@
     }
 
     .txt-hello {
-      font-size: clamp(.78rem, 2.4vw, .95rem);
-      color: var(--burgundy);
+      font-size: clamp(.8rem, 2.6vw, 1rem);
+      color: var(--burg);
       letter-spacing: .2em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       opacity: 0;
-      animation: fadeUp .8s .85s forwards;
+      animation: fadeUp .8s .9s forwards;
     }
 
     .txt-recipient {
       font-family: 'Dancing Script', cursive;
-      font-size: clamp(1.3rem, 5vw, 1.75rem);
+      font-size: clamp(1.4rem, 5.5vw, 1.85rem);
       color: var(--olive);
       font-weight: 600;
       margin-bottom: clamp(18px, 5vh, 30px);
       opacity: 0;
-      animation: fadeUp .8s 1.0s forwards;
+      animation: fadeUp .8s 1.05s forwards;
     }
 
     .btn-open {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(.78rem, 2.4vw, .95rem);
+      font-size: clamp(.8rem, 2.6vw, 1rem);
       font-weight: 700;
-      letter-spacing: .2em;
+      letter-spacing: .22em;
       text-transform: uppercase;
-      color: var(--burgundy);
+      color: var(--burg);
       background: transparent;
-      border: 1.5px solid var(--burgundy);
-      padding: clamp(10px, 3vw, 13px) clamp(26px, 7vw, 42px);
+      border: 1.5px solid var(--burg);
+      padding: clamp(10px, 3vw, 13px) clamp(28px, 8vw, 44px);
       border-radius: 3px;
       cursor: pointer;
       transition: background .3s, color .3s, transform .15s;
@@ -205,81 +332,73 @@
     }
 
     .btn-open:hover {
-      background: var(--burgundy);
+      background: var(--burg);
       color: var(--cream);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
 
     .btn-open:active {
       transform: translateY(0);
     }
 
-    /* ════════════════════════════
-     PAGE 2 — VIDEO
-  ════════════════════════════ */
-    #page2 {
-      background: var(--cream);
+    /* ═══════════════════════════════════════
+   PAGE 2 — VIDEO
+═══════════════════════════════════════ */
+    #p2 {
       display: none;
       opacity: 0;
       transition: opacity .5s ease;
-      z-index: 1;
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
+      min-height: 100svh;
+      background: url('bg.PNG') center center / cover no-repeat;
+      z-index: 1;
     }
 
-    #page2.visible {
+    #p2.visible {
       display: flex;
     }
 
-    #page2.show {
+    #p2.show {
       opacity: 1;
     }
 
-    /* video card — styled like reference image 3 */
+    /* video card */
     .vid-outer {
       position: relative;
       z-index: 1;
-      width: clamp(240px, 68vw, 310px);
-      background: #3d5218;
-      border-radius: 18px;
-      padding: 9px;
-      box-shadow: 0 14px 44px rgba(0, 0, 0, .35);
-    }
-
-    .vid-outer::before {
-      content: '';
-      position: absolute;
-      inset: 3px;
-      border-radius: 15px;
-      border: 1.5px solid rgba(201, 168, 76, .5);
-      pointer-events: none;
+      width: clamp(220px, 62vw, 290px);
+      background: rgba(248, 242, 234, 0.88);
+      border-radius: 14px;
+      padding: 3px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, .4);
+      border: 2.5px solid var(--burg);
     }
 
     .vid-inner {
-      background: var(--cream-dark);
-      border-radius: 10px;
+      background: var(--cream-d);
+      border-radius: 11px;
       overflow: hidden;
     }
 
     .vid-header {
-      padding: 13px 10px 7px;
+      padding: 14px 10px 8px;
       text-align: center;
     }
 
-    .vid-title-small {
+    .vid-small {
       font-family: 'Dancing Script', cursive;
-      font-size: clamp(.9rem, 3vw, 1.1rem);
-      color: var(--burgundy);
+      font-size: clamp(.9rem, 3.2vw, 1.1rem);
+      color: var(--burg);
       font-weight: 600;
-      line-height: 1.25;
     }
 
-    .vid-title-big {
+    .vid-big {
       font-family: 'Dancing Script', cursive;
-      font-size: clamp(1.2rem, 4.5vw, 1.55rem);
-      color: var(--burgundy);
+      font-size: clamp(1.25rem, 4.8vw, 1.6rem);
+      color: var(--burg);
       font-weight: 700;
     }
 
@@ -296,39 +415,18 @@
       object-fit: cover;
     }
 
-    /* corner vine overlay on video */
-    .vid-vine {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 2;
-    }
-
     .vid-footer {
       padding: 9px 10px 13px;
       text-align: center;
       font-style: italic;
-      font-size: clamp(.72rem, 2.2vw, .88rem);
+      font-size: clamp(.72rem, 2.3vw, .9rem);
       color: var(--olive);
       letter-spacing: .08em;
     }
 
-    /* ── ANIMATION ── */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* ════════════════════════════
-     DESKTOP — phone frame
-  ════════════════════════════ */
+    /* ═══════════════════════════════════════
+   DESKTOP
+═══════════════════════════════════════ */
     @media (min-width:600px) {
       body {
         display: flex;
@@ -338,7 +436,7 @@
         padding: 24px 0;
       }
 
-      .app-shell {
+      .shell {
         min-height: 0;
         height: min(860px, 95vh);
         border-radius: 14px;
@@ -351,7 +449,7 @@
         height: 100%;
       }
 
-      #page2 {
+      #p2 {
         height: 100%;
       }
     }
@@ -359,120 +457,246 @@
 </head>
 
 <body>
-  <div class="app-shell">
+  <div class="shell">
 
-    <!-- ══════════ PAGE 1: COVER ══════════ -->
-    <div id="page1" class="page">
+    <!-- ══════════════ PAGE 1 ══════════════ -->
+    <div id="p1" class="page">
 
-      <div class="floral-wrap" aria-hidden="true">
+      <div class="fl-wrap" aria-hidden="true">
 
-        <!-- CORNERS (170×170 viewBox, displayed at 165px) -->
-        <!-- TL -->
-        <svg class="c-svg c-tl" width="165" height="165" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
+        <!-- ═══ CORNER: TOP-LEFT ═══ -->
+        <svg class="c-stem tl" width="190" height="200" viewBox="0 0 190 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- main stem -->
+          <path d="M10 195 Q40 140 70 90 Q95 48 130 15" stroke="#4a5e1e" stroke-width="3" fill="none"
             stroke-linecap="round" />
-          <path d="M8 162 Q22 132 40 112" stroke="#7a8f3a" stroke-width="1.5" fill="none" opacity=".55" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <ellipse cx="74" cy="58" rx="15" ry="6" fill="#5a6b2a" transform="rotate(-58 74 58)" opacity=".8" />
-          <ellipse cx="28" cy="128" rx="14" ry="6" fill="#8a9f4a" transform="rotate(-22 28 128)" opacity=".7" />
-          <circle cx="118" cy="8" r="11" fill="#c97a9e" opacity=".9" />
-          <circle cx="118" cy="8" r="5" fill="#7a2444" />
-          <circle cx="133" cy="4" r="9" fill="#d4a0bc" opacity=".75" />
-          <circle cx="107" cy="19" r="9" fill="#b86890" opacity=".8" />
-          <circle cx="122" cy="21" r="7" fill="#e0b0cc" opacity=".7" />
-          <circle cx="65" cy="62" r="7" fill="#7a2444" opacity=".75" />
-          <circle cx="60" cy="54" r="6" fill="#c97a9e" opacity=".7" />
-          <path d="M90 28 L84 3" stroke="#9a8ab0" stroke-width="1.5" fill="none" />
-          <ellipse cx="84" cy="14" rx="3.5" ry="6" fill="#b0a0c8" opacity=".8" />
-          <ellipse cx="88" cy="8" rx="3" ry="5" fill="#9a8ab0" opacity=".7" />
-          <ellipse cx="80" cy="6" rx="3" ry="5" fill="#c0b0d8" opacity=".7" />
-          <circle cx="40" cy="112" r="6" fill="#e8c84a" opacity=".8" />
-          <circle cx="40" cy="112" r="3" fill="#c9a84c" />
-        </svg>
-        <!-- TR -->
-        <svg class="c-svg c-tr" width="165" height="165" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <ellipse cx="74" cy="58" rx="15" ry="6" fill="#5a6b2a" transform="rotate(-58 74 58)" opacity=".8" />
-          <ellipse cx="28" cy="128" rx="14" ry="6" fill="#8a9f4a" transform="rotate(-22 28 128)" opacity=".7" />
-          <circle cx="118" cy="8" r="11" fill="#d4906e" opacity=".9" />
-          <circle cx="118" cy="8" r="5" fill="#8b3a1a" />
-          <circle cx="133" cy="4" r="9" fill="#e0a080" opacity=".75" />
-          <circle cx="107" cy="19" r="9" fill="#c97a5e" opacity=".8" />
-          <circle cx="65" cy="62" r="7" fill="#8b3a1a" opacity=".7" />
-          <path d="M90 28 L84 3" stroke="#9a8ab0" stroke-width="1.5" fill="none" />
-          <ellipse cx="84" cy="14" rx="3.5" ry="6" fill="#b0a0c8" opacity=".8" />
-          <circle cx="40" cy="112" r="6" fill="#e8c84a" opacity=".8" />
-          <circle cx="40" cy="112" r="3" fill="#c9a84c" />
-        </svg>
-        <!-- BL -->
-        <svg class="c-svg c-bl" width="165" height="165" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <ellipse cx="74" cy="58" rx="15" ry="6" fill="#5a6b2a" transform="rotate(-58 74 58)" opacity=".8" />
-          <ellipse cx="28" cy="128" rx="14" ry="6" fill="#8a9f4a" transform="rotate(-22 28 128)" opacity=".7" />
-          <circle cx="118" cy="8" r="11" fill="#c97a9e" opacity=".85" />
-          <circle cx="118" cy="8" r="5" fill="#7a2444" />
-          <circle cx="107" cy="19" r="9" fill="#b86890" opacity=".8" />
-          <circle cx="65" cy="62" r="7" fill="#7a2444" opacity=".7" />
-          <path d="M90 28 L84 3" stroke="#9a8ab0" stroke-width="1.5" fill="none" />
-          <ellipse cx="84" cy="14" rx="3.5" ry="6" fill="#b0a0c8" opacity=".8" />
-        </svg>
-        <!-- BR -->
-        <svg class="c-svg c-br" width="165" height="165" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <ellipse cx="74" cy="58" rx="15" ry="6" fill="#5a6b2a" transform="rotate(-58 74 58)" opacity=".8" />
-          <ellipse cx="28" cy="128" rx="14" ry="6" fill="#8a9f4a" transform="rotate(-22 28 128)" opacity=".7" />
-          <circle cx="118" cy="8" r="11" fill="#d4906e" opacity=".85" />
-          <circle cx="118" cy="8" r="5" fill="#8b3a1a" />
-          <circle cx="107" cy="19" r="9" fill="#c97a5e" opacity=".8" />
-          <circle cx="65" cy="62" r="7" fill="#8b3a1a" opacity=".7" />
+          <!-- branch left -->
+          <path d="M55 110 Q30 95 15 80" stroke="#4a5e1e" stroke-width="2" fill="none" stroke-linecap="round" />
+          <!-- leaves -->
+          <ellipse cx="50" cy="108" rx="20" ry="8" fill="#6a7e30" transform="rotate(-50 50 108)" opacity=".85" />
+          <ellipse cx="78" cy="75" rx="17" ry="7" fill="#4a5e1e" transform="rotate(-62 78 75)" opacity=".85" />
+          <ellipse cx="28" cy="145" rx="16" ry="6" fill="#7a8e3a" transform="rotate(-28 28 145)" opacity=".75" />
+          <ellipse cx="18" cy="82" rx="14" ry="5" fill="#6a7e30" transform="rotate(-10 18 82)" opacity=".7" />
+          <!-- pink wisteria cluster top -->
+          <g>
+            <ellipse cx="130" cy="15" rx="9" ry="12" fill="#d4789e" opacity=".9" />
+            <ellipse cx="120" cy="22" rx="7" ry="10" fill="#e8a8c4" opacity=".8" />
+            <ellipse cx="138" cy="24" rx="7" ry="10" fill="#c96888" opacity=".85" />
+            <ellipse cx="128" cy="32" rx="6" ry="9" fill="#d4789e" opacity=".8" />
+            <ellipse cx="115" cy="30" rx="5" ry="8" fill="#e8a8c4" opacity=".7" />
+            <circle cx="130" cy="12" r="4" fill="#7a2444" />
+            <circle cx="120" cy="19" r="3" fill="#7a2444" />
+            <circle cx="138" cy="20" r="3" fill="#7a2444" />
+          </g>
+          <!-- mid bud -->
+          <circle cx="72" cy="87" r="8" fill="#d4789e" opacity=".85" />
+          <circle cx="72" cy="87" r="4" fill="#7a2444" />
+          <circle cx="65" cy="80" r="6" fill="#e8a8c4" opacity=".75" />
+          <!-- small berries -->
+          <circle cx="38" cy="130" r="5" fill="#7a2444" opacity=".8" />
+          <circle cx="30" cy="138" r="4" fill="#7a2444" opacity=".7" />
+          <circle cx="42" cy="142" r="4" fill="#7a2444" opacity=".75" />
+          <!-- lime yellow detail -->
+          <ellipse cx="95" cy="50" rx="4" ry="9" fill="#9aaa30" opacity=".8" />
+          <ellipse cx="105" cy="42" rx="3" ry="7" fill="#bac040" opacity=".7" />
         </svg>
 
-        <!-- SIDE STEMS (72×300 viewBox, displayed at 66×280) -->
-        <!-- Left -->
-        <svg class="s-svg s-left" width="66" height="280" viewBox="0 0 72 300" xmlns="http://www.w3.org/2000/svg">
-          <path d="M36 300 Q30 240 38 180 Q32 120 28 50" stroke="#5a6b2a" stroke-width="2" fill="none"
+        <!-- ═══ CORNER: TOP-RIGHT ═══ -->
+        <svg class="c-stem tr" width="190" height="200" viewBox="0 0 190 200" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 195 Q40 140 70 90 Q95 48 130 15" stroke="#4a5e1e" stroke-width="3" fill="none"
             stroke-linecap="round" />
-          <ellipse cx="41" cy="220" rx="13" ry="5" fill="#7a8f3a" transform="rotate(22 41 220)" opacity=".8" />
-          <ellipse cx="32" cy="160" rx="12" ry="5" fill="#5a6b2a" transform="rotate(-18 32 160)" opacity=".8" />
-          <ellipse cx="39" cy="105" rx="13" ry="5" fill="#7a8f3a" transform="rotate(28 39 105)" opacity=".7" />
-          <circle cx="28" cy="50" r="10" fill="#c97a9e" opacity=".9" />
-          <circle cx="28" cy="50" r="5" fill="#7a2444" />
-          <circle cx="17" cy="63" r="8" fill="#b86890" opacity=".8" />
-          <circle cx="41" cy="61" r="9" fill="#d4a0bc" opacity=".75" />
-          <circle cx="28" cy="73" r="8" fill="#c97a9e" opacity=".8" />
-          <path d="M33 120 L28 95" stroke="#9a8ab0" stroke-width="1.5" fill="none" />
-          <ellipse cx="28" cy="106" rx="3" ry="6" fill="#b0a0c8" opacity=".75" />
-          <ellipse cx="33" cy="101" rx="3" ry="6" fill="#9a8ab0" opacity=".7" />
-          <ellipse cx="24" cy="99" rx="3" ry="6" fill="#c0b0d8" opacity=".7" />
-        </svg>
-        <!-- Right -->
-        <svg class="s-svg s-right" width="66" height="280" viewBox="0 0 72 300" xmlns="http://www.w3.org/2000/svg">
-          <path d="M36 300 Q30 240 38 180 Q32 120 28 50" stroke="#5a6b2a" stroke-width="2" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="41" cy="220" rx="13" ry="5" fill="#7a8f3a" transform="rotate(22 41 220)" opacity=".8" />
-          <ellipse cx="32" cy="160" rx="12" ry="5" fill="#5a6b2a" transform="rotate(-18 32 160)" opacity=".8" />
-          <ellipse cx="39" cy="105" rx="13" ry="5" fill="#7a8f3a" transform="rotate(28 39 105)" opacity=".7" />
-          <circle cx="28" cy="50" r="10" fill="#d4906e" opacity=".9" />
-          <circle cx="28" cy="50" r="5" fill="#8b3a1a" />
-          <circle cx="17" cy="63" r="8" fill="#c97a5e" opacity=".8" />
-          <circle cx="41" cy="61" r="9" fill="#e0a080" opacity=".75" />
-          <circle cx="28" cy="73" r="8" fill="#d4906e" opacity=".8" />
-          <path d="M33 120 L28 95" stroke="#9a8ab0" stroke-width="1.5" fill="none" />
-          <ellipse cx="28" cy="106" rx="3" ry="6" fill="#b0a0c8" opacity=".75" />
-          <ellipse cx="33" cy="101" rx="3" ry="6" fill="#9a8ab0" opacity=".7" />
-          <ellipse cx="24" cy="99" rx="3" ry="6" fill="#c0b0d8" opacity=".7" />
+          <path d="M55 110 Q30 95 15 80" stroke="#4a5e1e" stroke-width="2" fill="none" stroke-linecap="round" />
+          <ellipse cx="50" cy="108" rx="20" ry="8" fill="#6a7e30" transform="rotate(-50 50 108)" opacity=".85" />
+          <ellipse cx="78" cy="75" rx="17" ry="7" fill="#4a5e1e" transform="rotate(-62 78 75)" opacity=".85" />
+          <ellipse cx="28" cy="145" rx="16" ry="6" fill="#7a8e3a" transform="rotate(-28 28 145)" opacity=".75" />
+          <ellipse cx="18" cy="82" rx="14" ry="5" fill="#6a7e30" transform="rotate(-10 18 82)" opacity=".7" />
+          <g>
+            <ellipse cx="130" cy="15" rx="9" ry="12" fill="#c97a5e" opacity=".9" />
+            <ellipse cx="120" cy="22" rx="7" ry="10" fill="#e0a080" opacity=".8" />
+            <ellipse cx="138" cy="24" rx="7" ry="10" fill="#b86848" opacity=".85" />
+            <ellipse cx="128" cy="32" rx="6" ry="9" fill="#c97a5e" opacity=".8" />
+            <ellipse cx="115" cy="30" rx="5" ry="8" fill="#e8b898" opacity=".7" />
+            <circle cx="130" cy="12" r="4" fill="#7a2444" />
+            <circle cx="120" cy="19" r="3" fill="#7a2444" />
+            <circle cx="138" cy="20" r="3" fill="#7a2444" />
+          </g>
+          <circle cx="72" cy="87" r="8" fill="#e0a060" opacity=".85" />
+          <circle cx="72" cy="87" r="4" fill="#8b3a1a" />
+          <circle cx="65" cy="80" r="6" fill="#f0c898" opacity=".75" />
+          <circle cx="38" cy="130" r="5" fill="#7a2444" opacity=".8" />
+          <circle cx="30" cy="138" r="4" fill="#7a2444" opacity=".7" />
+          <circle cx="42" cy="142" r="4" fill="#7a2444" opacity=".75" />
+          <ellipse cx="95" cy="50" rx="4" ry="9" fill="#9aaa30" opacity=".8" />
+          <ellipse cx="105" cy="42" rx="3" ry="7" fill="#bac040" opacity=".7" />
         </svg>
 
-      </div><!-- /floral-wrap -->
+        <!-- ═══ CORNER: BOTTOM-LEFT ═══ -->
+        <svg class="c-stem bl" width="190" height="200" viewBox="0 0 190 200" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 195 Q40 140 70 90 Q95 48 130 15" stroke="#4a5e1e" stroke-width="3" fill="none"
+            stroke-linecap="round" />
+          <path d="M55 110 Q30 95 15 80" stroke="#4a5e1e" stroke-width="2" fill="none" stroke-linecap="round" />
+          <ellipse cx="50" cy="108" rx="20" ry="8" fill="#6a7e30" transform="rotate(-50 50 108)" opacity=".85" />
+          <ellipse cx="78" cy="75" rx="17" ry="7" fill="#4a5e1e" transform="rotate(-62 78 75)" opacity=".85" />
+          <ellipse cx="28" cy="145" rx="16" ry="6" fill="#7a8e3a" transform="rotate(-28 28 145)" opacity=".75" />
+          <g>
+            <ellipse cx="130" cy="15" rx="9" ry="12" fill="#d4789e" opacity=".85" />
+            <ellipse cx="120" cy="22" rx="7" ry="10" fill="#e8a8c4" opacity=".8" />
+            <ellipse cx="138" cy="24" rx="7" ry="10" fill="#c96888" opacity=".85" />
+            <ellipse cx="128" cy="32" rx="6" ry="9" fill="#d4789e" opacity=".75" />
+            <circle cx="130" cy="12" r="4" fill="#7a2444" />
+          </g>
+          <circle cx="72" cy="87" r="7" fill="#d4789e" opacity=".85" />
+          <circle cx="72" cy="87" r="3" fill="#7a2444" />
+          <circle cx="38" cy="130" r="5" fill="#7a2444" opacity=".8" />
+          <circle cx="30" cy="138" r="4" fill="#7a2444" opacity=".7" />
+          <ellipse cx="95" cy="50" rx="4" ry="9" fill="#9aaa30" opacity=".75" />
+        </svg>
 
-      <div class="cover-inner">
-        <p class="lbl-inv">Wedding Invitation</p>
+        <!-- ═══ CORNER: BOTTOM-RIGHT ═══ -->
+        <svg class="c-stem br" width="190" height="200" viewBox="0 0 190 200" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 195 Q40 140 70 90 Q95 48 130 15" stroke="#4a5e1e" stroke-width="3" fill="none"
+            stroke-linecap="round" />
+          <path d="M55 110 Q30 95 15 80" stroke="#4a5e1e" stroke-width="2" fill="none" stroke-linecap="round" />
+          <ellipse cx="50" cy="108" rx="20" ry="8" fill="#6a7e30" transform="rotate(-50 50 108)" opacity=".85" />
+          <ellipse cx="78" cy="75" rx="17" ry="7" fill="#4a5e1e" transform="rotate(-62 78 75)" opacity=".85" />
+          <ellipse cx="28" cy="145" rx="16" ry="6" fill="#7a8e3a" transform="rotate(-28 28 145)" opacity=".75" />
+          <g>
+            <ellipse cx="130" cy="15" rx="9" ry="12" fill="#c97a5e" opacity=".85" />
+            <ellipse cx="120" cy="22" rx="7" ry="10" fill="#e0a080" opacity=".8" />
+            <ellipse cx="138" cy="24" rx="7" ry="10" fill="#b86848" opacity=".85" />
+            <ellipse cx="128" cy="32" rx="6" ry="9" fill="#c97a5e" opacity=".75" />
+            <circle cx="130" cy="12" r="4" fill="#8b3a1a" />
+          </g>
+          <circle cx="72" cy="87" r="7" fill="#e0a060" opacity=".85" />
+          <circle cx="72" cy="87" r="3" fill="#8b3a1a" />
+          <circle cx="38" cy="130" r="5" fill="#7a2444" opacity=".8" />
+          <circle cx="30" cy="138" r="4" fill="#7a2444" opacity=".7" />
+          <ellipse cx="95" cy="50" rx="4" ry="9" fill="#9aaa30" opacity=".75" />
+        </svg>
+
+        <!-- ═══ SIDE LEFT STEM ═══ -->
+        <svg class="s-stem left" width="68" height="320" viewBox="0 0 68 320" xmlns="http://www.w3.org/2000/svg">
+          <path d="M34 318 Q26 255 36 190 Q28 130 26 60" stroke="#4a5e1e" stroke-width="2.5" fill="none"
+            stroke-linecap="round" />
+          <!-- branches -->
+          <path d="M33 200 Q12 188 5 170" stroke="#4a5e1e" stroke-width="1.5" fill="none" />
+          <path d="M29 120 Q10 110 4 95" stroke="#4a5e1e" stroke-width="1.5" fill="none" />
+          <!-- leaves -->
+          <ellipse cx="36" cy="250" rx="14" ry="6" fill="#6a7e30" transform="rotate(25 36 250)" opacity=".8" />
+          <ellipse cx="29" cy="185" rx="13" ry="5" fill="#4a5e1e" transform="rotate(-20 29 185)" opacity=".8" />
+          <ellipse cx="34" cy="130" rx="13" ry="5" fill="#7a8e3a" transform="rotate(30 34 130)" opacity=".75" />
+          <ellipse cx="27" cy="80" rx="11" ry="4" fill="#6a7e30" transform="rotate(-10 27 80)" opacity=".7" />
+          <ellipse cx="8" cy="170" rx="10" ry="4" fill="#6a7e30" transform="rotate(5 8 170)" opacity=".7" />
+          <ellipse cx="7" cy="97" rx="9" ry="3" fill="#4a5e1e" transform="rotate(-5 7 97)" opacity=".65" />
+          <!-- TOP flower cluster -->
+          <ellipse cx="26" cy="60" rx="8" ry="11" fill="#d4789e" opacity=".9" />
+          <ellipse cx="36" cy="55" rx="7" ry="10" fill="#e8a8c4" opacity=".8" />
+          <ellipse cx="20" cy="50" rx="6" ry="9" fill="#c96888" opacity=".85" />
+          <ellipse cx="30" cy="44" rx="5" ry="8" fill="#d4789e" opacity=".8" />
+          <ellipse cx="40" cy="66" rx="5" ry="7" fill="#e8a8c4" opacity=".7" />
+          <circle cx="26" cy="57" r="4" fill="#7a2444" />
+          <circle cx="36" cy="52" r="3" fill="#7a2444" />
+          <!-- berries -->
+          <circle cx="10" cy="172" r="5" fill="#7a2444" opacity=".8" />
+          <circle cx="5" cy="178" r="4" fill="#7a2444" opacity=".7" />
+          <circle cx="6" cy="99" r="4" fill="#7a2444" opacity=".75" />
+          <circle cx="3" cy="106" r="3" fill="#7a2444" opacity=".7" />
+          <!-- lime sprigs -->
+          <ellipse cx="33" cy="148" rx="3" ry="7" fill="#9aaa30" opacity=".8" />
+          <ellipse cx="38" cy="143" rx="2.5" ry="6" fill="#bac040" opacity=".7" />
+        </svg>
+
+        <!-- ═══ SIDE RIGHT STEM (mirror) ═══ -->
+        <svg class="s-stem right" width="68" height="320" viewBox="0 0 68 320" xmlns="http://www.w3.org/2000/svg">
+          <path d="M34 318 Q26 255 36 190 Q28 130 26 60" stroke="#4a5e1e" stroke-width="2.5" fill="none"
+            stroke-linecap="round" />
+          <path d="M33 200 Q12 188 5 170" stroke="#4a5e1e" stroke-width="1.5" fill="none" />
+          <path d="M29 120 Q10 110 4 95" stroke="#4a5e1e" stroke-width="1.5" fill="none" />
+          <ellipse cx="36" cy="250" rx="14" ry="6" fill="#6a7e30" transform="rotate(25 36 250)" opacity=".8" />
+          <ellipse cx="29" cy="185" rx="13" ry="5" fill="#4a5e1e" transform="rotate(-20 29 185)" opacity=".8" />
+          <ellipse cx="34" cy="130" rx="13" ry="5" fill="#7a8e3a" transform="rotate(30 34 130)" opacity=".75" />
+          <ellipse cx="27" cy="80" rx="11" ry="4" fill="#6a7e30" transform="rotate(-10 27 80)" opacity=".7" />
+          <ellipse cx="8" cy="170" rx="10" ry="4" fill="#6a7e30" transform="rotate(5 8 170)" opacity=".7" />
+          <ellipse cx="7" cy="97" rx="9" ry="3" fill="#4a5e1e" transform="rotate(-5 7 97)" opacity=".65" />
+          <!-- peach/orange tones for right side -->
+          <ellipse cx="26" cy="60" rx="8" ry="11" fill="#c97a5e" opacity=".9" />
+          <ellipse cx="36" cy="55" rx="7" ry="10" fill="#e0a080" opacity=".8" />
+          <ellipse cx="20" cy="50" rx="6" ry="9" fill="#b86848" opacity=".85" />
+          <ellipse cx="30" cy="44" rx="5" ry="8" fill="#c97a5e" opacity=".8" />
+          <ellipse cx="40" cy="66" rx="5" ry="7" fill="#e8b898" opacity=".7" />
+          <circle cx="26" cy="57" r="4" fill="#8b3a1a" />
+          <circle cx="36" cy="52" r="3" fill="#8b3a1a" />
+          <circle cx="10" cy="172" r="5" fill="#7a2444" opacity=".8" />
+          <circle cx="5" cy="178" r="4" fill="#7a2444" opacity=".7" />
+          <circle cx="6" cy="99" r="4" fill="#7a2444" opacity=".75" />
+          <circle cx="3" cy="106" r="3" fill="#7a2444" opacity=".7" />
+          <ellipse cx="33" cy="148" rx="3" ry="7" fill="#9aaa30" opacity=".8" />
+          <ellipse cx="38" cy="143" rx="2.5" ry="6" fill="#bac040" opacity=".7" />
+        </svg>
+
+        <!-- ═══ FLOATING BLOOMS (scattered) ═══ -->
+        <!-- top center petals -->
+        <svg class="bloom" style="top:2%;left:38%;width:28px;" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="12" fill="#e8a8c4" opacity=".9" />
+          <circle cx="20" cy="20" r="6" fill="#7a2444" />
+          <circle cx="20" cy="10" r="5" fill="#f0c0d8" opacity=".8" />
+          <circle cx="29" cy="15" r="5" fill="#f0c0d8" opacity=".8" />
+          <circle cx="29" cy="25" r="5" fill="#f0c0d8" opacity=".8" />
+          <circle cx="20" cy="30" r="5" fill="#f0c0d8" opacity=".8" />
+          <circle cx="11" cy="25" r="5" fill="#f0c0d8" opacity=".8" />
+          <circle cx="11" cy="15" r="5" fill="#f0c0d8" opacity=".8" />
+        </svg>
+
+        <svg class="bloom" style="top:5%;left:55%;width:22px;animation-delay:.3s,2s;" viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="10" fill="#d4789e" opacity=".85" />
+          <circle cx="20" cy="20" r="5" fill="#7a2444" />
+          <circle cx="20" cy="11" r="4" fill="#e8a8c4" opacity=".8" />
+          <circle cx="28" cy="15" r="4" fill="#e8a8c4" opacity=".8" />
+          <circle cx="28" cy="25" r="4" fill="#e8a8c4" opacity=".8" />
+          <circle cx="20" cy="29" r="4" fill="#e8a8c4" opacity=".8" />
+          <circle cx="12" cy="25" r="4" fill="#e8a8c4" opacity=".8" />
+          <circle cx="12" cy="15" r="4" fill="#e8a8c4" opacity=".8" />
+        </svg>
+
+        <!-- bottom floating -->
+        <svg class="bloom" style="bottom:8%;left:42%;width:24px;animation-delay:.5s,2.5s;" viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="11" fill="#c97a5e" opacity=".85" />
+          <circle cx="20" cy="20" r="5" fill="#8b3a1a" />
+          <circle cx="20" cy="11" r="4.5" fill="#e0a888" opacity=".8" />
+          <circle cx="28" cy="15" r="4.5" fill="#e0a888" opacity=".8" />
+          <circle cx="28" cy="25" r="4.5" fill="#e0a888" opacity=".8" />
+          <circle cx="20" cy="29" r="4.5" fill="#e0a888" opacity=".8" />
+          <circle cx="12" cy="25" r="4.5" fill="#e0a888" opacity=".8" />
+          <circle cx="12" cy="15" r="4.5" fill="#e0a888" opacity=".8" />
+        </svg>
+
+        <!-- middle right stray bud -->
+        <svg class="bloom" style="top:42%;right:3%;width:18px;animation-delay:.2s,1.8s;" viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="10" fill="#d4789e" opacity=".8" />
+          <circle cx="20" cy="20" r="5" fill="#7a2444" />
+          <circle cx="20" cy="11" r="4" fill="#f0c0d8" opacity=".75" />
+          <circle cx="28" cy="25" r="4" fill="#f0c0d8" opacity=".75" />
+          <circle cx="12" cy="25" r="4" fill="#f0c0d8" opacity=".75" />
+        </svg>
+
+        <!-- middle left stray bud -->
+        <svg class="bloom" style="top:48%;left:3%;width:18px;animation-delay:.4s,2.3s;" viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="10" fill="#e0a060" opacity=".8" />
+          <circle cx="20" cy="20" r="5" fill="#8b3a1a" />
+          <circle cx="20" cy="11" r="4" fill="#f0c888" opacity=".75" />
+          <circle cx="28" cy="25" r="4" fill="#f0c888" opacity=".75" />
+          <circle cx="12" cy="25" r="4" fill="#f0c888" opacity=".75" />
+        </svg>
+
+      </div><!-- /fl-wrap -->
+
+      <!-- ── Cover content ── -->
+      <div class="cover-body">
+        <p class="lbl-wedding">Wedding</p>
+        <p class="lbl-invitation">Invitation</p>
 
         <div class="img-wrap">
           <img src="logo.PNG" alt="Ananta & Desy">
@@ -483,100 +707,21 @@
         <button class="btn-open" onclick="openInvitation()">Open Invitation</button>
       </div>
 
-    </div><!-- /page1 -->
+    </div><!-- /p1 -->
 
 
-    <!-- ══════════ PAGE 2: VIDEO ══════════ -->
-    <div id="page2" class="page">
-
-      <!-- same floral corners, slightly smaller -->
-      <div class="floral-wrap" aria-hidden="true">
-        <svg class="c-svg c-tl" width="140" height="140" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg"
-          opacity=".75">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <ellipse cx="74" cy="58" rx="15" ry="6" fill="#5a6b2a" transform="rotate(-58 74 58)" opacity=".8" />
-          <circle cx="118" cy="8" r="11" fill="#c97a9e" opacity=".9" />
-          <circle cx="118" cy="8" r="5" fill="#7a2444" />
-          <circle cx="107" cy="19" r="9" fill="#b86890" opacity=".8" />
-          <path d="M90 28 L84 3" stroke="#9a8ab0" stroke-width="1.5" fill="none" />
-          <ellipse cx="84" cy="14" rx="3.5" ry="6" fill="#b0a0c8" opacity=".8" />
-        </svg>
-        <svg class="c-svg c-tr" width="140" height="140" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg"
-          opacity=".75">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <ellipse cx="74" cy="58" rx="15" ry="6" fill="#5a6b2a" transform="rotate(-58 74 58)" opacity=".8" />
-          <circle cx="118" cy="8" r="11" fill="#d4906e" opacity=".9" />
-          <circle cx="118" cy="8" r="5" fill="#8b3a1a" />
-          <circle cx="107" cy="19" r="9" fill="#c97a5e" opacity=".8" />
-          <path d="M90 28 L84 3" stroke="#9a8ab0" stroke-width="1.5" fill="none" />
-          <ellipse cx="84" cy="14" rx="3.5" ry="6" fill="#b0a0c8" opacity=".8" />
-        </svg>
-        <svg class="c-svg c-bl" width="140" height="140" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg"
-          opacity=".75">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <circle cx="118" cy="8" r="11" fill="#c97a9e" opacity=".85" />
-          <circle cx="118" cy="8" r="5" fill="#7a2444" />
-        </svg>
-        <svg class="c-svg c-br" width="140" height="140" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg"
-          opacity=".75">
-          <path d="M8 162 Q32 105 65 62 Q90 28 118 8" stroke="#5a6b2a" stroke-width="2.5" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="48" cy="90" rx="18" ry="7" fill="#7a8f3a" transform="rotate(-42 48 90)" opacity=".8" />
-          <circle cx="118" cy="8" r="11" fill="#d4906e" opacity=".85" />
-          <circle cx="118" cy="8" r="5" fill="#8b3a1a" />
-        </svg>
-        <svg class="s-svg s-left" width="56" height="240" viewBox="0 0 72 300" xmlns="http://www.w3.org/2000/svg"
-          opacity=".75">
-          <path d="M36 300 Q30 240 38 180 Q32 120 28 50" stroke="#5a6b2a" stroke-width="2" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="41" cy="220" rx="13" ry="5" fill="#7a8f3a" transform="rotate(22 41 220)" opacity=".8" />
-          <ellipse cx="32" cy="160" rx="12" ry="5" fill="#5a6b2a" transform="rotate(-18 32 160)" opacity=".8" />
-          <circle cx="28" cy="50" r="10" fill="#c97a9e" opacity=".9" />
-          <circle cx="28" cy="50" r="5" fill="#7a2444" />
-          <circle cx="17" cy="63" r="8" fill="#b86890" opacity=".8" />
-          <circle cx="41" cy="61" r="9" fill="#d4a0bc" opacity=".75" />
-        </svg>
-        <svg class="s-svg s-right" width="56" height="240" viewBox="0 0 72 300" xmlns="http://www.w3.org/2000/svg"
-          opacity=".75">
-          <path d="M36 300 Q30 240 38 180 Q32 120 28 50" stroke="#5a6b2a" stroke-width="2" fill="none"
-            stroke-linecap="round" />
-          <ellipse cx="41" cy="220" rx="13" ry="5" fill="#7a8f3a" transform="rotate(22 41 220)" opacity=".8" />
-          <ellipse cx="32" cy="160" rx="12" ry="5" fill="#5a6b2a" transform="rotate(-18 32 160)" opacity=".8" />
-          <circle cx="28" cy="50" r="10" fill="#d4906e" opacity=".9" />
-          <circle cx="28" cy="50" r="5" fill="#8b3a1a" />
-          <circle cx="17" cy="63" r="8" fill="#c97a5e" opacity=".8" />
-          <circle cx="41" cy="61" r="9" fill="#e0a080" opacity=".75" />
-        </svg>
-      </div>
+    <!-- ══════════════ PAGE 2 ══════════════ -->
+    <div id="p2" class="page">
 
       <!-- VIDEO CARD -->
       <div class="vid-outer">
         <div class="vid-inner">
           <div class="vid-header">
-            <div class="vid-title-small">The Wedding of</div>
-            <div class="vid-title-big">Ananta &amp; Desy</div>
+            <div class="vid-small">The Wedding of</div>
+            <div class="vid-big">Ananta &amp; Desy</div>
           </div>
 
           <div class="vid-player">
-            <svg class="vid-vine" viewBox="0 0 280 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-              <g opacity=".55">
-                <path d="M0 35 Q18 12 42 0" stroke="#5a6b2a" stroke-width="2" fill="none" />
-                <circle cx="42" cy="0" r="5" fill="#c97a9e" opacity=".8" />
-                <circle cx="30" cy="5" r="4" fill="#7a8f3a" opacity=".7" />
-                <path d="M280 35 Q262 12 238 0" stroke="#5a6b2a" stroke-width="2" fill="none" />
-                <circle cx="238" cy="0" r="5" fill="#c97a9e" opacity=".8" />
-                <path d="M0 465 Q18 488 42 500" stroke="#5a6b2a" stroke-width="2" fill="none" />
-                <circle cx="42" cy="500" r="5" fill="#d4906e" opacity=".8" />
-                <path d="M280 465 Q262 488 238 500" stroke="#5a6b2a" stroke-width="2" fill="none" />
-                <circle cx="238" cy="500" r="5" fill="#d4906e" opacity=".8" />
-              </g>
-            </svg>
             <video id="weddingVideo" playsinline muted loop style="background:#111;">
               <source src="anantadesy.mp4" type="video/mp4">
             </video>
@@ -586,36 +731,40 @@
         </div>
       </div>
 
-    </div><!-- /page2 -->
+    </div><!-- /p2 -->
 
-  </div><!-- /app-shell -->
+  </div><!-- /shell -->
 
   <script>
     function openInvitation() {
-      const p1 = document.getElementById('page1');
-      const p2 = document.getElementById('page2');
+      const p1 = document.getElementById('p1');
+      const p2 = document.getElementById('p2');
 
-      // slide page 1 up
+      // slide p1 up
       p1.style.transition = 'transform 0.85s cubic-bezier(0.77,0,0.175,1)';
-      p1.style.transform = 'translateY(-100%)';
       p1.style.position = 'absolute';
       p1.style.top = '0';
       p1.style.left = '0';
       p1.style.width = '100%';
       p1.style.zIndex = '10';
-
-      // show page 2
-      p2.style.display = 'flex';
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => { p2.style.opacity = '1'; });
+        requestAnimationFrame(() => {
+          p1.style.transform = 'translateY(-100%)';
+        });
       });
 
-      // autoplay video after slide completes
+      // show p2
+      p2.classList.add('visible');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { p2.classList.add('show'); });
+      });
+
+      // autoplay video
       setTimeout(() => {
         const vid = document.getElementById('weddingVideo');
         vid.muted = false;
         vid.play().catch(() => { vid.muted = true; vid.play(); });
-      }, 800);
+      }, 850);
     }
   </script>
 </body>
